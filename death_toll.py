@@ -17,11 +17,13 @@ first_msg = ("\nWelcome to Death counter!\n"
     "\nThis program is ment to help keep track of deahts in games.\n"
     "First you will be asked to type in the name of the game you are playing.\n"
     "Then you will be prompted to type the boss you are fighting against.\n"
-    "After this the program is started\n"
-    "\nNow everytime you hit '/' a death will be added\n"
+    "After this the program is on.\n"
+    "\nNow everytime you hit '/' a death will be added.\n"
     "Once you are done, press ] to either choose to:\n"
-    "\nRestart the program and add a new boss, or new boss and game.\n"
-    "\nClose the program.\n"
+    "\nrestart the program and add a new game or boss\n"
+    "Or\n"
+    "close the program.\n"
+    "\nIf you are fighting the same boss from last time, enter the name of the game and boss, and it will add to that.\n"
     "Thank you for using this program!\n")
 # Msg to be displayed the first time the program is started
     
@@ -45,12 +47,12 @@ def check_file():
             
 
 def get_names():
-    """Gets the name of the game and boss."""
+    """\nGets the name of the game and boss."""
     
-    game = input("What is the name of the game you are playing? ")
+    game = input("\nWhat is the name of the game you are playing?\n ").strip()
     game = game.title()
     
-    boss = input("What is the name of the boss you are fighting against? ")
+    boss = input("\nWhat is the name of the boss you are fighting against?\n ").strip()
     boss = boss.title()
     
     return game, boss
@@ -63,7 +65,7 @@ def make_or_load(empty):
     game, boss = get_names()
 
     if empty is True:
-        deaths = {game: {boss: {'times': {}}}}
+        deaths = {game: {boss: {'deaths': {}}}}
         count = False
         return deaths, count, game, boss
         
@@ -76,12 +78,12 @@ def make_or_load(empty):
                 return deaths, count, game, boss
             
             elif boss not in deaths:
-                deaths[game][boss] = {'times': {}}
+                deaths[game][boss] = {'deaths': {}}
                 count = False 
                 return deaths, count, game, boss
             
         elif game not in deaths:
-            deaths[game] = {boss: {'times': {}}}
+            deaths[game] = {boss: {'deaths': {}}}
             count = False
             return deaths, count, game, boss
 # This is a bunch of true or false tests, to see what should happen with the data
@@ -93,7 +95,8 @@ def main():
 
     def counter():
         number_deaths.append("1")
-        deaths[game][boss]['times'][str(len(number_deaths))] = {'time': time.strftime('%d: %m: %Y: %H_%M')}
+        deaths[game][boss]['deaths'][str(len(number_deaths))] = {'time': time.strftime('%d: %m: %Y: %H_%M')}
+        
         
         with open(file1, 'w') as f:
             json.dump(deaths, f, indent=6)
@@ -105,14 +108,19 @@ def main():
         if empty is True:
             print(first_msg)
         elif empty is False:
-            print("Welcome back!\n")
+            print("Welcome back!\n"
+                  "\nCONTROLS:\n"
+                  ":    '/'    adds a death\n"
+                  ":    '1'    allows user to either restart and add new games or bosses, or close.")
         deaths, count, game, boss = make_or_load(empty)
+        with open(file1, 'w') as f:
+            json.dump(deaths, f, indent=6)
 
         if count is True:
             with open(file1, 'r') as f:
                 place = json.load(f)
                 number_deaths = []
-                for x in place[game][boss]['times'].keys():
+                for x in place[game][boss]['deaths'].keys():
                     number_deaths.append("1")
         
         elif count is False:
@@ -127,7 +135,7 @@ def main():
 
 while True:
     main()
-    ans = input("Do you want to close or restart? (c/r): ").lower()
+    ans = input("\nDo you want to close or restart? (c/r):\n ").lower()
     
     if ans == "c":
         break
