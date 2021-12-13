@@ -90,7 +90,7 @@ def make_or_load(empty):
 # as well as to see what needs to happen on the counter function
 
     
-def main():
+def main_func():
     """Main loop of the program."""
 
     def counter():
@@ -131,14 +131,3 @@ def main():
         break
 # This is simply the main loop of the program
 # that gets all the data and sends it to the right place
-
-
-while True:
-    main()
-    ans = input("\nDo you want to close or restart? (c/r):\n ").lower()
-    
-    if ans == "c":
-        break
-    elif ans == "r":
-        continue     
-        
