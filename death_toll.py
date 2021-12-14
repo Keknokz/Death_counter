@@ -95,7 +95,7 @@ def main_func():
 
     def counter():
         number_deaths.append("1")
-        deaths[game][boss]['deaths'][str(len(number_deaths))] = {'time': time.strftime('%d: %m: %Y: %H_%M')}
+        deaths[game][boss]['deaths'][str(len(number_deaths))] = {'time': time.strftime('%d.%m.%Y - %H:%M')}
         
         
         with open(file1, 'w') as f:
@@ -128,6 +128,15 @@ def main_func():
             
         keyboard.add_hotkey("/", counter)
         keyboard.wait("1")
+        print("Have you killed this boss?\n")
+        ans = input("(y/n): ").lower()
+        
+        if ans == 'y':
+            deaths[game][boss]['deaths']['killed'] = {f"{boss} was killed on:": time.strftime('%d.%m.%Y: %H:%M')}
+            with open(file1, 'w') as f:
+                json.dump(deaths, f, indent=6)
+        if ans == 'n':
+            pass
         break
 # This is simply the main loop of the program
 # that gets all the data and sends it to the right place
