@@ -1,7 +1,7 @@
-import matplotlib.pyplot as plt
 import time
 import json
 
+import plotly.io as pio
 
 class DeathCounterVisualization:
     """A class to visualize deaths in games"""
@@ -14,6 +14,7 @@ class DeathCounterVisualization:
         self._get_game_boss_name
         self._get_data
         
+        self.game_name = []
         
     def _get_game_boss_name(self):
         """returns the name of the game and the boss"""
@@ -35,6 +36,8 @@ class DeathCounterVisualization:
         """gets the correct data from the game"""
         
         game = self._get_game_boss_name()
+        self.game_name.append(game)
+        
         boss_deaths_times = {}
 
         with open(self.file) as f:
@@ -61,12 +64,16 @@ class DeathCounterVisualization:
                 
                 boss_deaths_times[boss] = {'total deaths': num_deaths, 'start date': start_date, 'end date': end_date}
         
-        return boss_deaths_times           
+        return boss_deaths_times          
+
 
     def visualize(self):
         """Visualizes the deaths in a game."""
         
+        
         data = self._get_data()
+        
+        
         
         boss_names = list(data.keys())
         
@@ -74,25 +81,22 @@ class DeathCounterVisualization:
         start_date = []
         end_date = []
         
+        game = self.game_name[0]
+        
         for boss in boss_names:
             num_deaths.append(int(data[boss]['total deaths']))
             start_date.append(data[boss]['start date'])
             end_date.append(data[boss]['end date'])
-            
-        plt.rcParams.update({'figure.autolayout': True})
         
+        title = f"Your deaths in the game: {game.title()}"
         
-        fig, ax = plt.subplots(figsize=(19, 10))
-        plt.style.use('fivethirtyeight')
-        ax.bar(boss_names, num_deaths)
-        labels = ax.get_xticklabels()
-        plt.setp(labels, rotation=0, horizontalalignment='right')
-        ax.set(xlabel='Boss Names', ylabel='deaths')
-        
-        plt.show()
-        
-                
-        
+        fig = dict({
+            "data": [{"type": "bar",
+                      "x": boss_names,
+                      "y": num_deaths}],
+            "layout": {"title": {"text": title}}
+        })       
+        pio.show(fig)
 
 
 file = 'data/deaths_and_times.json'

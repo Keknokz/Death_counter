@@ -9,16 +9,16 @@ while True:
     
     death_toll.main_func()
     
-    ans = input("\nDo you want to visualize your deaths?\n"
-                "Or do you want to restart the program?\n"
-                "Or do you want to close the program?\n"
-                "(vis/r/close): ").lower()
+    ans = input("\nDo you want to visualize your deaths?\n\n"
+                "Or do you want to restart the program?\n\n"
+                "Or do you want to close the program?\n\n"
+                "(v/r/c): ").lower()
     
-    if ans == 'vis':
+    if ans == 'v':
         pass
     elif ans == 'r':
         continue
-    elif ans == 'close':
+    elif ans == 'c':
         break
     
     
