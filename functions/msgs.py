@@ -67,7 +67,7 @@ def death_toll_intro():
             "Next ill show you the controls.")
     
     
-    print(Fore.GREEN + "\n\n--Controls--\n"
+    print(Fore.BLUE + "\n\n--Controls--\n"
           "\nTo add a death press --/-- this will add the death and a time\n"
           "\nTo stop the program press --1-- this will ask if you killed the boss"
           "\nall this does is add a time that you killed the boss")
@@ -85,9 +85,21 @@ def death_toll_wel_back():
     print(Fore.RED + "Welcome back!")
     
     
-    print(Fore.GREEN + "\n--Controls--\n"
+    print(Fore.YELLOW + "\n--Controls--\n"
           "\n--/-- to add a death"
           "\n\n--1-- to stop")
     
+
+def death_toll_not_start():
+    """Prints if you haven't started the boss"""
     
-death_toll_wel_back()
+    print(Fore.YELLOW + "Hit --/-- once you are ready to start,\n"
+          "after this inital --/--, all other --/-- will add a death\n")
+
+
+def death_toll_control():
+    """Controls for counter function"""
+    
+    print(Fore.YELLOW + "--/-- to add a death")
+    
+    print(Fore.YELLOW + "\nPress --1-- to stop")
