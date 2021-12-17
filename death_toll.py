@@ -139,22 +139,37 @@ def main_func():
     
     
         #Checks if you want to start the boss now
-        start_ans = input(Fore.GREEN + f"Is this the start of you fighting: {boss}?\n(y/n)? ").lower()
+        start_ans = input(Fore.GREEN + f"Are you away to fight {boss} for the first time."
+                          "\nThis adds a start date. If you have already started fighing this boss put --n--"
+                          "\nIf this is the start of this boss, put --y--\n"
+                          "(y/n): ").lower()
         
         if start_ans == 'y':
-            deaths[game][boss]['deaths']['start date'] = {'time': time.strftime('%d.%m.%Y: %H:%M')}
-        
+            try:
+                if start_ans == 'y':
+                    if deaths[game][boss]['deaths']['start date'] != 'n/a':
+                        clear()
+                        print(Fore.BLUE + f"{boss}: has already been started\n")
+                        continue
+                    
+                    elif deaths[game][boss]['deaths']['start date'] == 'n/a':
+                        deaths[game][boss]['deaths']['start date'] = {'time': time.strftime('%d.%m.%Y: %H:%M')}
+            except KeyError:
+                deaths[game][boss]['deaths']['start date'] = {'time': time.strftime('%d/%m/%Y - %H:%M')}
+            
         elif start_ans == 'n':
-            
-            if "n/a" not in deaths[game][boss]['deaths']['start date']['time']:
+            try:
+                if "n/a" in deaths[game][boss]['deaths']['start date']['time']:
+                    clear()
+                    death_toll_not_start()
+                    deaths[game][boss]['deaths']['start date'] = {'time': 'n/a'}
+                    
+            except KeyError:
                 clear()
-                print(Fore.BLUE + "This boss has already been started\n")
-                continue
-            
-            
-            elif "n/a" in deaths[game][boss]['deaths']['start date']['time']:
+                death_toll_not_start()
                 deaths[game][boss]['deaths']['start date'] = {'time': 'n/a'}
         
+
         with open(file1, 'w') as f:
             json.dump(deaths, f, indent=6)
 
@@ -164,21 +179,17 @@ def main_func():
             
             if "killed" in deaths[game][boss]['deaths'].keys():
                 clear()
-                print(Fore.BLUE + "This boss has been killed.\n")
+                print(Fore.BLUE + f"{boss} has already been killed.\n")
                 continue
             
             elif "killed" not in deaths[game][boss]['deaths'].keys():
             
                 if "start date" in deaths[game][boss]['deaths'].keys():
             
-                    for i in len(deaths[game][boss]['deaths'].keys()):
+                    for i in deaths[game][boss]['deaths'].keys():
                         number_deaths.append("1")
-                        number_deaths.pop()
+                    number_deaths.pop()
             
-                elif "start date" not in deaths[game][boss]['deaths'].keys():
-                    for i in len(deaths[game][boss]['deaths'].keys()):
-                        number_deaths.append("1")
-        
         elif count is False:
             number_deaths = []
 
@@ -187,7 +198,7 @@ def main_func():
         death_toll_control()
         keyboard.wait("1")
         clear()
-        print(fore.GREEN + "\nHave you killed this boss?\n")
+        print(Fore.GREEN + "\nHave you killed this boss?\n")
         ans = input(Fore.GREEN + "(y/n): ").lower()
         
         # Checks if you have killed the boss
@@ -198,5 +209,3 @@ def main_func():
         if ans == 'n':
             pass
         break
-
-main_func()
