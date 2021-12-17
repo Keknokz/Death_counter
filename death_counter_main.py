@@ -1,25 +1,33 @@
-import json
+from functions.msgs import main_file_intro
+from functions.clear import clear
 
 import death_toll
-# imports the main module of death_counter
 
 
-while True:
-    """The main loop the runs this program"""
+flag = True
+
+
+def main_function(flag):
+    """Main function for this whole program"""
     
-    death_toll.main_func()
-    
-    ans = input("\nDo you want to visualize your deaths?\n\n"
-                "Or do you want to restart the program?\n\n"
-                "Or do you want to close the program?\n\n"
-                "(v/r/c): ").lower()
-    
-    if ans == 'v':
-        pass
-    elif ans == 'r':
-        continue
-    elif ans == 'c':
+    while flag is True:
+        """Main loop"""
+        
+        main_file_intro()
+        
+        while True:
+            fun_ans = input("--> ").lower()
+            
+            if fun_ans == 'close':
+                break
+            
+            elif fun_ans == 'cls':
+                clear()
+                
+            elif fun_ans == 'res':
+                main_file_intro()
+            
         break
-    
-    
-    
+                
+        
+main_function(flag)

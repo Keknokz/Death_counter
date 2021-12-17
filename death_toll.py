@@ -2,10 +2,6 @@ import os
 import time
 import json
 import keyboard
-# os, for checking files
-# time to get time of death
-# json to load stuff
-# keyboard to set hot keys
 
 
 file1 = 'data/deaths_and_times.json'
@@ -26,6 +22,7 @@ first_msg = ("\nWelcome to Death counter!\n"
     "\nIf you are fighting the same boss from last time, enter the name of the game and boss, and it will add deaths to that.\n"
     "Thank you for using this program!")
 # Msg to be displayed the first time the program is started
+
     
 def check_file():
     """Checks if a file is empty, or doesn't exist"""
@@ -47,7 +44,10 @@ def check_file():
             
 
 def get_names_plus_make_stuff(empty):
-    """\nGets the name of the game and boss.""" 
+    """
+    Gets the name of the game and boss,
+    and makes the dict containing them
+    """ 
                 
     if empty is True:
         
@@ -62,23 +62,28 @@ def get_names_plus_make_stuff(empty):
         
         return deaths, count, game, boss
         
-    
+        
     elif empty is False:
+        
         with open(file1, 'r') as f:
             deaths = json.load(f)
             
             print("Here is a list of games you have saved:\n")    
             for x in deaths.keys():
                 print(f"-- {x}\n")
+            
             game = input("What is the name of the game you are playing?\n ").strip()
             game = game.title()
+            
                 
         if game in deaths:
             print("\nHere is a list of bosses you have saved:\n")
             for x in deaths[game].keys():
                 print(f"-- {x}\n")
+            
             boss = input("What is the name of the boss you are fighing against?\n ").strip()
             boss = boss.title()
+            
             
             if boss in deaths[game]:
                 count = True
@@ -89,6 +94,7 @@ def get_names_plus_make_stuff(empty):
                 count = False 
                 return deaths, count, game, boss
         
+        
         elif game not in deaths:
             boss = input("What is the name of the boss you are fighting against?\n ").strip()
             boss = boss.title()
@@ -97,18 +103,22 @@ def get_names_plus_make_stuff(empty):
             count = False
             
             return deaths, count, game, boss
-# This is a bunch of true or false tests, to see what should happen with the data
-# as well as to see what needs to happen on the counter function
+# This checks if the file is empty if it isn't
+# it shows what games are saved in the file
+# if bosses are in the game it shows the names of the bosses
 
 def main_func():
     """Main loop of the program."""
 
     def counter():
-    
+        """
+        This is the counter, if the boss hasnt been started it starts it
+        otherwise it adds a death and saves it
+        """
         if deaths[game][boss]['deaths']['start date']['time'] == 'n/a':
-            deaths[game][boss]['deaths']['start date']['time'] = [time.strftime('%d/%m/%Y - %H:%M')]
+            deaths[game][boss]['deaths']['start date'] = {'time': time.strftime('%d/%m/%Y - %H:%M')}
             
-        elif deaths[game][boss]['deaths']['start date'] != 'not started':
+        elif deaths[game][boss]['deaths']['start date']['time'] != 'n/a':
             number_deaths.append("1")
             deaths[game][boss]['deaths'][str(len(number_deaths))] = {'time': time.strftime('%d/%m/%Y - %H:%M')}
             
@@ -117,7 +127,9 @@ def main_func():
         with open(file2, 'w') as f:
             json.dump(number_deaths, f, indent=6)
 
+
     while True:
+        #Main loop
         empty = check_file()
         
         if empty is True:
@@ -131,19 +143,20 @@ def main_func():
             
         deaths, count, game, boss = get_names_plus_make_stuff(empty)
     
+        #Checks if you want to start the boss now
         start_ans = input(f"\nIs this the start of you fighting: {boss}?\n(y/n)? ").lower()
         if start_ans == 'y':
             deaths[game][boss]['deaths']['start date'] = {'time': time.strftime('%d.%m.%Y: %H:%M')}
-            break
         elif start_ans == 'n':
             deaths[game][boss]['deaths']['start date'] = {'time': 'n/a'}
-            print("Hit '/' once you are ready to start, after this inital '/', all other '/' will add a death")
+            print("\nHit '/' once you are ready to start, after this inital '/', all other '/' will add a death")
         
         with open(file1, 'w') as f:
             json.dump(deaths, f, indent=6)
 
+        #Checks if the counter needs to be from another boss
         if count is True:
-            with open(file1, 'r'):
+            with open(file1):
                 place = json.load(file1)
                 number_deaths = []
                 for x in place[game][boss]['deaths'].keys():
@@ -152,11 +165,15 @@ def main_func():
         elif count is False:
             number_deaths = []
             
+        # Adds the hot key
         keyboard.add_hotkey("/", counter)
+        ans = input("Type 'cls' to clear the screen\n"
+                     "Type 'res' to restore it\n").lower()
         keyboard.wait("1")
         print("\nHave you killed this boss?\n")
         ans = input("(y/n): ").lower()
         
+        # Checks if you have killed the boss
         if ans == 'y':
             deaths[game][boss]['deaths']['killed'] = {f"{boss} killed on:": time.strftime('%d.%m.%Y: %H:%M')}
             with open(file1, 'w') as f:
@@ -164,5 +181,3 @@ def main_func():
         if ans == 'n':
             pass
         break
-# This is simply the main loop of the program
-# that gets all the data and sends it to the right place

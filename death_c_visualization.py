@@ -1,22 +1,23 @@
+from logging import Handler
 import time
 import json
 
-import plotly.io as pio
+import plotly.graph_objects as go
 
 class DeathCounterVisualization:
     """A class to visualize deaths in games"""
 
-    def __init__(self, file):
+    def __init__(self):
         """Initialize"""
         
-        self.file = file
+        self.file = 'data/deaths_and_times.json'
         
-        self._get_game_boss_name
-        self._get_data
+        self._get_game_name
+        #self._get_data
         
         self.game_name = []
         
-    def _get_game_boss_name(self):
+    def _get_game_name(self):
         """returns the name of the game and the boss"""
         
         games = []
@@ -30,76 +31,12 @@ class DeathCounterVisualization:
         game_name = input("What is the name of the game you want to visualize? ").title().strip()
         
         return game_name
-        
-        
-    def _get_data(self):
-        """gets the correct data from the game"""
-        
-        game = self._get_game_boss_name()
-        self.game_name.append(game)
-        
-        boss_deaths_times = {}
-
-        with open(self.file) as f:
-            death_data = json.load(f)    
-        
-        for boss in death_data[game].keys():
-            if "killed" in death_data[game][boss]['deaths'].keys():
-                
-                start_date = list(death_data[game][boss]['deaths']["1"].values())[0]
-                
-                num_deaths = list(death_data[game][boss]['deaths'].keys())[-2]
-
-                end_date = list(death_data[game][boss]['deaths']["killed"].values())[0]
-                
-                boss_deaths_times[boss] = {'total deaths': num_deaths, 'start date': start_date, 'end date': end_date}
-            
-            elif "killed" not in death_data[game][boss]['deaths'].keys():
-                
-                start_date = list(death_data[game][boss]['deaths']["1"].values())[0]
-                
-                num_deaths = list(death_data[game][boss]['deaths'].keys())[-1]
-                
-                end_date = 'not killed'
-                
-                boss_deaths_times[boss] = {'total deaths': num_deaths, 'start date': start_date, 'end date': end_date}
-        
-        return boss_deaths_times          
-
-
-    def visualize(self):
-        """Visualizes the deaths in a game."""
-        
-        
-        data = self._get_data()
-        
-        
-        
-        boss_names = list(data.keys())
-        
-        num_deaths = []
-        start_date = []
-        end_date = []
-        
-        game = self.game_name[0]
-        
-        for boss in boss_names:
-            num_deaths.append(int(data[boss]['total deaths']))
-            start_date.append(data[boss]['start date'])
-            end_date.append(data[boss]['end date'])
-        
-        title = f"Your deaths in the game: {game.title()}"
-        
-        fig = dict({
-            "data": [{"type": "bar",
-                      "x": boss_names,
-                      "y": num_deaths}],
-            "layout": {"title": {"text": title}}
-        })       
-        pio.show(fig)
-
-
-file = 'data/deaths_and_times.json'
     
-te = DeathCounterVisualization(file)
-te.visualize()
+    
+    def get_data(self):
+        """Gets the data that plotly needs"""
+        
+    def main_vis_fun(self):
+        """Main function"""
+            
+    
