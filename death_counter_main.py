@@ -1,33 +1,36 @@
+from re import M
+from colorama import init, Fore
+
 from functions.msgs import main_file_intro
 from functions.clear import clear
 
 import death_toll
 
 
-flag = True
-
-
-def main_function(flag):
+def main_function():
     """Main function for this whole program"""
     
-    while flag is True:
-        """Main loop"""
+    init(autoreset=True)
+    
+    main_file_intro()
+    
+    while True:
+        """Main loop for choosing a function"""
         
-        main_file_intro()
+        ans = input(Fore.GREEN + "--> ").lower()
         
-        while True:
-            fun_ans = input("--> ").lower()
-            
-            if fun_ans == 'close':
-                break
-            
-            elif fun_ans == 'cls':
-                clear()
-                
-            elif fun_ans == 'res':
-                main_file_intro()
-            
-        break
-                
+        if ans == 'count':
+            clear()
+            death_toll.main_func()
         
-main_function(flag)
+        if ans == 'cls':
+            clear()
+            continue
+        
+        elif ans == 'res':
+            main_file_intro()
+        
+        elif ans == 'close':
+            break
+        
+main_function()
