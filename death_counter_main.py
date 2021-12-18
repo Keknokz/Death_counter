@@ -1,7 +1,6 @@
-from re import M
 from colorama import init, Fore
 
-from functions.msgs import main_file_intro
+from functions.msgs import MainFile
 from functions.clear import clear
 
 import death_toll
@@ -12,23 +11,38 @@ def main_function():
     
     init(autoreset=True)
     
-    main_file_intro()
+    mf = MainFile
+    
+    mf.main_file_intro()
     
     while True:
         """Main loop for choosing a function"""
         
-        ans = input(Fore.GREEN + "--> ").lower()
+        ans = input(Fore.GREEN + "--> ").lower().strip()
         
         if ans == 'count':
-            clear()
-            death_toll.main_func()
+            while True:
+                clear()
+                death_toll.main_func()
+                res_ans = input(Fore.GREEN + "\nDo you want to track another game/boss?\n"
+                                "Or do you want to quit?\n"
+                                "('r'/'q'): ").lower()
+                
+                if res_ans == 'r':
+                    continue
+                elif res_ans == 'q':
+                    break
+                    
+            
+        #elif ans == 'vis':
+            
         
-        if ans == 'cls':
+        elif ans == 'cls':
             clear()
             continue
         
         elif ans == 'res':
-            main_file_intro()
+            mf.main_file_intro()
         
         elif ans == 'close':
             break

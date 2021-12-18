@@ -5,11 +5,14 @@ import keyboard
 from colorama import init, Fore
 
 from functions.clear import clear
-from functions.msgs import death_toll_intro, death_toll_wel_back, death_toll_not_start, death_toll_control
+from functions.msgs import Counter 
 
 file1 = 'data/deaths_and_times.json'
 file2 = 'data/number_deaths.json'
 # Basic files for this program
+
+
+c = Counter
 
     
 def check_file():
@@ -129,10 +132,10 @@ def main_func():
         empty = check_file()
         
         if empty is True:
-            death_toll_intro()
+            c.death_toll_intro()
         
         elif empty is False:
-            death_toll_wel_back()
+            c.death_toll_wel_back()
             
             
         deaths, count, game, boss = get_names_plus_make_stuff(empty)
@@ -154,6 +157,9 @@ def main_func():
                     
                     elif deaths[game][boss]['deaths']['start date'] == 'n/a':
                         deaths[game][boss]['deaths']['start date'] = {'time': time.strftime('%d.%m.%Y: %H:%M')}
+                        clear()
+                        c.death_toll_control()
+                        
             except KeyError:
                 deaths[game][boss]['deaths']['start date'] = {'time': time.strftime('%d/%m/%Y - %H:%M')}
             
@@ -161,12 +167,12 @@ def main_func():
             try:
                 if "n/a" in deaths[game][boss]['deaths']['start date']['time']:
                     clear()
-                    death_toll_not_start()
+                    c.death_toll_not_start()
                     deaths[game][boss]['deaths']['start date'] = {'time': 'n/a'}
                     
             except KeyError:
                 clear()
-                death_toll_not_start()
+                c.death_toll_not_start()
                 deaths[game][boss]['deaths']['start date'] = {'time': 'n/a'}
         
 
@@ -195,7 +201,6 @@ def main_func():
 
         # Adds the hot key
         keyboard.add_hotkey("/", counter)
-        death_toll_control()
         keyboard.wait("1")
         clear()
         print(Fore.GREEN + "\nHave you killed this boss?\n")
@@ -209,3 +214,4 @@ def main_func():
         if ans == 'n':
             pass
         break
+        
