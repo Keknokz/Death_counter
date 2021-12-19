@@ -156,7 +156,7 @@ def main_func():
                         continue
                     
                     elif deaths[game][boss]['deaths']['start date'] == 'n/a':
-                        deaths[game][boss]['deaths']['start date'] = {'time': time.strftime('%d.%m.%Y: %H:%M')}
+                        deaths[game][boss]['deaths']['start date'] = {'time': time.strftime('%d/%m/%Y: %H:%M')}
                         clear()
                         c.death_toll_control()
                         
