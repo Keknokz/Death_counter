@@ -161,6 +161,8 @@ def main_func():
                         c.death_toll_control()
                         
             except KeyError:
+                clear()
+                c.death_toll_control()
                 deaths[game][boss]['deaths']['start date'] = {'time': time.strftime('%d/%m/%Y - %H:%M')}
             
         elif start_ans == 'n':
