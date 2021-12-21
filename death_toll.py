@@ -3,16 +3,20 @@ import time
 import json
 import keyboard
 from colorama import init, Fore
+# main imports
 
 from functions.clear import clear
 from functions.msgs import Counter 
+# function imports
+
 
 file1 = 'data/deaths_and_times.json'
 file2 = 'data/number_deaths.json'
-# Basic files for this program
+# file paths
 
 
 c = Counter
+# the functions imports
 
     
 def check_file():
@@ -30,8 +34,8 @@ def check_file():
         with open(file2, 'w') as f:
             f.close()
         return True
-    # Checks if a file is empty and looks for a FileNotFoundError
-    # if the error happens it makes the files
+    # Checks if the file is empty
+    # If it gets a file not found error it makes the files
             
 
 def get_names_plus_make_stuff(empty):
@@ -55,6 +59,8 @@ def get_names_plus_make_stuff(empty):
         clear()
         
         return deaths, count, game, boss
+        # if the file is empty then it only
+        # has to get the name of the game and boss
         
         
     elif empty is False:
@@ -68,7 +74,9 @@ def get_names_plus_make_stuff(empty):
             
             game = input(Fore.GREEN +"\nWhat is the name of the game you are playing?\n ").strip()
             game = game.title()
-            
+            # if the it isnt empty then
+            # it shows what games are saved
+                        
                 
         if game in deaths:
             print(Fore.BLUE + "\nHere is a list of bosses you have saved:\n")
@@ -77,18 +85,23 @@ def get_names_plus_make_stuff(empty):
             
             boss = input(Fore.GREEN + "What is the name of the boss you are fighing against?\n ").strip()
             boss = boss.title()
+            # it shows what bosses are saved so you 
+            # can fight a boss saved or a new one
             
             
             if boss in deaths[game]:
                 count = True
                 clear()
                 return deaths, count, game, boss
+                # if the boss is in the game 
+                # it needs to start from the last death
             
             elif boss not in deaths:
                 deaths[game][boss] = {'deaths': {}}
                 count = False 
                 clear()
                 return deaths, count, game, boss
+                # if the boss isnt in the game it adds it
         
         
         elif game not in deaths:
@@ -100,10 +113,10 @@ def get_names_plus_make_stuff(empty):
             count = False
             
             return deaths, count, game, boss
-# This checks if the file is empty if it isn't
-# it shows what games are saved in the file
-# if bosses are in the game it shows the names of the bosses
-
+            # if the game isnt saved it adds
+            # the game
+            
+            
 def main_func():
     """Main loop of the program."""
     
@@ -116,15 +129,18 @@ def main_func():
         """
         if deaths[game][boss]['deaths']['start date']['time'] == 'n/a':
             deaths[game][boss]['deaths']['start date'] = {'time': time.strftime('%d/%m/%Y - %H:%M')}
+            # if there is no start date it adds one
             
         elif deaths[game][boss]['deaths']['start date']['time'] != 'n/a':
             number_deaths.append("1")
             deaths[game][boss]['deaths'][str(len(number_deaths))] = {'time': time.strftime('%d/%m/%Y - %H:%M')}
+            # if there is a start date it adds a death
             
         with open(file1, 'w') as f:
             json.dump(deaths, f, indent=6)
         with open(file2, 'w') as f:
             json.dump(number_deaths, f, indent=6)
+            # saves it
 
 
     while True:
@@ -136,16 +152,21 @@ def main_func():
         
         elif empty is False:
             c.death_toll_wel_back()
+        # checks what intro it has to print
             
             
         deaths, count, game, boss = get_names_plus_make_stuff(empty)
+        # makes the var
     
     
-        #Checks if you want to start the boss now
+    
         start_ans = input(Fore.GREEN + f"Are you away to fight {boss} for the first time."
                           "\nThis adds a start date. If you have already started fighing this boss put --n--"
                           "\nIf this is the start of this boss, put --y--\n"
                           "(y/n): ").lower()
+        # checks if you have just started the boss
+        # if you have yet to start 
+        # or if you are continuing 
         
         if start_ans == 'y':
             try:
@@ -154,34 +175,43 @@ def main_func():
                         clear()
                         print(Fore.BLUE + f"{boss}: has already been started\n")
                         continue
+                        # checks if the boss has already been started
                     
                     elif deaths[game][boss]['deaths']['start date'] == 'n/a':
                         deaths[game][boss]['deaths']['start date'] = {'time': time.strftime('%d/%m/%Y: %H:%M')}
                         clear()
                         c.death_toll_control()
+                        # adds a start date if their isnt one
                         
             except KeyError:
                 clear()
                 c.death_toll_control()
                 deaths[game][boss]['deaths']['start date'] = {'time': time.strftime('%d/%m/%Y - %H:%M')}
-            
+                # if there is a key error make the start date
+                
         elif start_ans == 'n':
             try:
                 if "n/a" in deaths[game][boss]['deaths']['start date']['time']:
                     clear()
                     c.death_toll_not_start()
                     deaths[game][boss]['deaths']['start date'] = {'time': 'n/a'}
-                    
+                
+                elif "n/a" not in deaths[game][boss]['deaths']['start date']['time']:
+                    clear()
+                    c.death_toll_control
+                # checks if this is a continuation or not
+                
             except KeyError:
                 clear()
                 c.death_toll_not_start()
                 deaths[game][boss]['deaths']['start date'] = {'time': 'n/a'}
+            # if their is a key error it makes the right dict
         
 
         with open(file1, 'w') as f:
             json.dump(deaths, f, indent=6)
+            # saves
 
-        #Checks if the counter needs to be from another boss
         if count is True:
             number_deaths = []
             
@@ -189,6 +219,7 @@ def main_func():
                 clear()
                 print(Fore.BLUE + f"{boss} has already been killed.\n")
                 continue
+            # checks if the boss has already been killed
             
             elif "killed" not in deaths[game][boss]['deaths'].keys():
             
@@ -197,6 +228,7 @@ def main_func():
                     for i in deaths[game][boss]['deaths'].keys():
                         number_deaths.append("1")
                     number_deaths.pop()
+            # if not it gets the right number of deaths
             
         elif count is False:
             number_deaths = []
@@ -204,6 +236,9 @@ def main_func():
         # Adds the hot key
         keyboard.add_hotkey("/", counter)
         keyboard.wait("1")
+        # adds the hot key
+        # the wait is to stop input lag
+        
         clear()
         print(Fore.GREEN + "\nHave you killed this boss?\n")
         ans = input(Fore.GREEN + "(y/n): ").lower()
@@ -215,5 +250,6 @@ def main_func():
                 json.dump(deaths, f, indent=6)
         if ans == 'n':
             pass
+        # checks if you have killed the boss
         break
         
