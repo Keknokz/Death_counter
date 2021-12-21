@@ -51,7 +51,7 @@ def get_names_plus_make_stuff(empty):
         game = input(Fore.GREEN + "\nWhat is the name of the game you are playing?\n ").strip()
         game = game.title()
         
-        boss = input(Fore.GREEN + "\nWhat is the name of the boss you are fighting against?\n ").strip()
+        boss = input(Fore.GREEN + "\nWhat is the name of the boss you are fighting?\n ").strip()
         boss = boss.title()
         
         deaths = {game: {boss: {'deaths': {}}}}
@@ -79,11 +79,11 @@ def get_names_plus_make_stuff(empty):
                         
                 
         if game in deaths:
-            print(Fore.BLUE + "\nHere is a list of bosses you have saved:\n")
+            print(Fore.BLUE + "\n\nHere is a list of bosses you have saved:")
             for x in deaths[game].keys():
-                print(Fore.MAGENTA + f"-- {x}\n")
+                print(Fore.MAGENTA + f"\n-- {x}")
             
-            boss = input(Fore.GREEN + "What is the name of the boss you are fighing against?\n ").strip()
+            boss = input(Fore.GREEN + "\nWhat is the name of the boss you are fighting?\n ").strip()
             boss = boss.title()
             # it shows what bosses are saved so you 
             # can fight a boss saved or a new one
@@ -105,7 +105,7 @@ def get_names_plus_make_stuff(empty):
         
         
         elif game not in deaths:
-            boss = input(Fore.GREEN + "\nWhat is the name of the boss you are fighting against?\n ").strip()
+            boss = input(Fore.GREEN + "\nWhat is the name of the boss you are fighting?\n ").strip()
             boss = boss.title()
             
             deaths[game] = {boss: {'deaths': {}}}
@@ -240,7 +240,7 @@ def main_func():
         # the wait is to stop input lag
         
         clear()
-        print(Fore.GREEN + "\nHave you killed this boss?\n")
+        print(Fore.BLUE + f"Have you killed {boss}\n")
         ans = input(Fore.GREEN + "(y/n): ").lower()
         
         # Checks if you have killed the boss
