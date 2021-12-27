@@ -23,6 +23,9 @@ c = Counter
 def check_file():
     """Checks if a file is empty, or doesn't exist"""
     
+    if not os.path.exists('data'):
+        os.mkdir('data')
+        
     try:
         with open(file1, 'r'):
             if os.path.getsize(file1) == 0:
