@@ -1,10 +1,13 @@
 import json
 from colorama import init, Fore
+import plotly.graph_objects as go
+# main imports
+
 
 from functions.msgs import Visualization
 from functions.clear import clear
+# function imports
 
-import plotly.graph_objects as go
 
 class DeathCounterVisualization:
     """A class to visualize deaths in games"""
@@ -14,11 +17,11 @@ class DeathCounterVisualization:
         
         self.file = 'data/deaths_and_times.json'
         
-        self.v = Visualization()
+        # this is for the msgs
         
         self._get_game_name
         self._get_data
-        
+        # helper functions
         
         init(autoreset=True)
         
@@ -29,12 +32,13 @@ class DeathCounterVisualization:
         with open(self.file) as f:
             deaths = json.load(f)
             
-            print(Fore.BLUE + "\n\nHere is a list of games that can be visualized\n")
+            print(Fore.BLUE + "\nHere is a list of games that can be visualized:")
             for x in deaths.keys():
-               print(Fore.MAGENTA + f"-- {x}\n")
+               print(Fore.MAGENTA + f"\n-- {x}")
             
-            ans = input(Fore.GREEN + "What is the name of the game you want to visualize?\n ").strip().lower()
+            ans = input(Fore.GREEN + "\nWhat is the name of the game you want to visualize?\n ").strip().lower()
             game = ans.title()
+            # gets the game name
             
         return deaths, game
     
@@ -56,6 +60,7 @@ class DeathCounterVisualization:
             
             elif "killed" not in deaths[game][x]['deaths'].keys():
                 num_deaths.append(int(list(deaths[game][x]['deaths'].keys())[-1]))
+            # makes sure it gets the right key
             
         return game, boss_names, num_deaths
     
@@ -63,7 +68,9 @@ class DeathCounterVisualization:
     def main_vis(self):
         """Main functions of the visual part"""
         
-        self.v.vis_intro()
+        v = Visualization
+        
+        v.vis_intro()
         
         while True:
                 
@@ -91,19 +98,13 @@ class DeathCounterVisualization:
             
             clear()
             
-            ans = input(Fore.GREEN + "Do you want to quit the visualization?\n"
-                        "Or do you want to visualize another game?\n"
-                        "('q'/'r'): ").lower()
+            ans = input(Fore.GREEN + "Do you want to get another visualization?\n"
+                        "Or do you want to quti?\n"
+                        "(r/q): ").lower()
             
-            if ans == 'q':
-                break
-            
-            elif ans == 'r':
+            if ans == 'r':
                 continue
-        
             
-        
-                
-vis = DeathCounterVisualization()
-
-vis.main_vis()
+            elif ans == 'q':
+                break
+        # main visualization loop

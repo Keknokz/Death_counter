@@ -5,6 +5,7 @@ import keyboard
 from colorama import init, Fore
 # main imports
 
+
 from functions.clear import clear
 from functions.msgs import Counter 
 # function imports
@@ -159,10 +160,10 @@ def main_func():
         # makes the var
     
     
-    
         start_ans = input(Fore.GREEN + f"Are you away to fight {boss} for the first time."
-                          "\nThis adds a start date. If you have already started fighing this boss put --n--"
+                          "\nThis adds a start date."
                           "\nIf this is the start of this boss, put --y--\n"
+                          "\nIf you have already started fighing this boss put --n--"
                           "(y/n): ").lower()
         # checks if you have just started the boss
         # if you have yet to start 
@@ -198,7 +199,7 @@ def main_func():
                 
                 elif "n/a" not in deaths[game][boss]['deaths']['start date']['time']:
                     clear()
-                    c.death_toll_control
+                    c.death_toll_control()
                 # checks if this is a continuation or not
                 
             except KeyError:
